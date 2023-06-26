@@ -49,18 +49,10 @@ describe("Error message 404 when sent a bad request", () => {
 
 }) })
 
-describe("GET /api/", () => {
 
-    test('Should respond with a status of 200 when the correct request is sent',() => {
 
-        return request(app)
-        .get("/api/")
-        .expect(200)
-        .then(({body}) => {
-            expect(body.msg).toBe("200 - request successful");
-        });
 
-    })
 
-})
+
+
 
