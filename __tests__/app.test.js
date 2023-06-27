@@ -199,7 +199,7 @@ describe('GET /api/articles/:article_id', () => {
 
 describe("POST /api/articles/:article_id/comments", () => {
 
-    test("status 201 - should respond with the posted comment when the correct properties are provided", () => {
+    test.only("status 201 - should respond with the posted comment when the correct properties are provided", () => {
 
         const comment = {
             username: "butter_bridge",
@@ -223,7 +223,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
 
 
-    test.only("sends a 400 when an invalid type request is sent" , () => {
+    test("sends a 400 when an invalid type request is sent" , () => {
 
         const comment = {
             username: "butter_bridge",
