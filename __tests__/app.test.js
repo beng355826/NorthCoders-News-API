@@ -3,7 +3,6 @@ const app = require("../db/app")
 const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/index")
-// const { selectTopics } = require("../models/get-api-topics.model")
 
 beforeEach(() => {
     return seed(data)
@@ -48,6 +47,42 @@ describe("Error message 404 when sent a bad request", () => {
             .expect(404)
 
 }) })
+
+
+
+
+
+describe("GET /api/", () => {
+
+    test('Should respond with a status of 200 when the correct request is sent',() => {
+
+        return request(app)
+        .get("/api/")
+        .expect(200)
+
+    })
+
+    test('Should respond with a description of all available endpoints correctly formatted',() => {
+
+        return request(app)
+        .get("/api/")
+        .expect(200)
+        .then((body) => {
+
+        for(const key in body._body){
+        expect(body._body[key]).toHaveProperty("description", expect.any(String))
+        expect(body._body[key]).toHaveProperty("queries", expect.any(Array))
+        expect(body._body[key]).toHaveProperty("format", expect.any(String))
+        expect(body._body[key]).toHaveProperty("exampleResponse", expect.any(Object))
+
+            }
+        
+        })
+
+    })
+
+}) 
+
 
 
 
