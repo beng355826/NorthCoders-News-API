@@ -5,6 +5,7 @@ const getAllArticles = (req , res) => {
 
     return selectAllArticles().then((data) => {
         res.status(200).send(data)
+        
     })
 
 }
