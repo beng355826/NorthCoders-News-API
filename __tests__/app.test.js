@@ -163,3 +163,23 @@ describe("GET /api/", () => {
 
 
 // challenge 5
+
+describe("GET /api/articles", () => {
+    test("check the request returns a 200 and has the correct properties", () => {
+
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({body}) => {
+
+        body.forEach(article => {
+
+            e
+            
+        })
+
+        })
+
+    })
+
+})
