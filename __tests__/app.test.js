@@ -14,6 +14,15 @@ afterAll(() => {
 
 
 
+describe('GET /api/topics', () => {
+    test('responds with a 200 status code when request is successful', () => {
+
+        return request(app)
+        .get("/api/topics")
+        .expect(200)
+      
+    })
+
     test('responds with all the topics', () => {
         return request(app)
         .get("/api/topics")
@@ -29,6 +38,7 @@ afterAll(() => {
 
     })
 
+})
 
 describe("Error message 404 when sent a bad request", () => {
     test("responds with an error 404 when the Get request can not be found", () => {
@@ -72,6 +82,7 @@ describe("GET /api/", () => {
     })
 
 }) 
+
 
 
 
