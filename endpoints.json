@@ -1,17 +1,34 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "serves up a json representation of all the available endpoints of the api",
+    "queries": [],
+    "format" : "n/a",
+    "exampleResponse" : {
+
+      "GET /api/topics": {
+        "description": "serves an array of all topics",
+        "queries": [],
+        "format" : "n/a",
+        "exampleResponse": {
+          "topics": [{ "slug": "football", "description": "Footie!" }]
+        }
+      }
+    }
+    
+
   },
   "GET /api/topics": {
     "description": "serves an array of all topics",
     "queries": [],
+    "format" : "n/a",
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
+    "description": "serves an array of all articles",
     "queries": ["author", "topic", "sort_by", "order"],
+    "format": "n/a",
     "exampleResponse": {
       "articles": [
         {

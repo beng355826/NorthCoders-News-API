@@ -1,15 +1,15 @@
 const express = require("express")
 const {getTopics} = require("../controllers/get-api-topics.controller")
+const {getControllerApi} = require("../controllers/api-get.controller")
+
 
 const {getArticles} = require('../controllers/get-articles.controller')
 
 const app = express()
 
-
-
-
-
 app.get('/api/topics', getTopics)
+
+app.get('/api/', getControllerApi )
 
 app.get('/api/articles/:articles_id', getArticles)
 
@@ -25,10 +25,5 @@ app.use((err,req, res, next) => {
         msg:'404 - not found'
     })
 })
-
-
-
-
-
 
 module.exports = app
