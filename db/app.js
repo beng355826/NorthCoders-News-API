@@ -10,7 +10,26 @@ app.get('/api/topics', getTopics)
 
 app.get('/api/', getControllerApi)
 
+
+
+
+
+
+
+
+
 app.get('/api/articles', getAllArticles)
+
+app.use((err, req, res, next) => {
+    if(err.code){
+        res.status(400).send({msg: '400 - invalid type request'})
+    }
+    next(err)
+})
+
+app.use((err,req, res, next) => {
+    res.status(404).send({msg:'404 - not found'})
+})
 
 
 module.exports = app

@@ -3,6 +3,7 @@ const app = require("../db/app")
 const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/index")
+const sorted = require("jest-sorted")
 
 beforeEach(() => {
     return seed(data)
@@ -161,9 +162,6 @@ describe("GET /api/", () => {
 
 
 
-
-// challenge 5
-
 describe("GET /api/articles", () => {
     test("check the request returns a 200 and has the correct properties", () => {
 
@@ -173,21 +171,34 @@ describe("GET /api/articles", () => {
         .then(({body}) => {
 
         expect(body).toHaveLength(13)    
-       
-        // body.forEach(article => {
-        // expect(article).toHaveProperty('author', expect.any(String))
-        // expect(article).toHaveProperty('title', expect.any(String))
-        // expect(article).toHaveProperty('article_id', expect.any(Number))
-        // expect(article).toHaveProperty('topic', expect.any(String))
-        // expect(article).toHaveProperty('created_at', expect.any(String))
-        // expect(article).toHaveProperty('votes', expect.any(Number))
-        // expect(article).toHaveProperty('article_img_url', expect.any(String))
-        // expect(article).toHaveProperty('comment_count', expect.any(Number))
+        body.forEach(article => {
+        expect(article).toHaveProperty('author', expect.any(String))
+        expect(article).toHaveProperty('title', expect.any(String))
+        expect(article).toHaveProperty('article_id', expect.any(Number))
+        expect(article).toHaveProperty('topic', expect.any(String))
+        expect(article).toHaveProperty('created_at', expect.any(String))
+        expect(article).toHaveProperty('votes', expect.any(Number))
+        expect(article).toHaveProperty('article_img_url', expect.any(String))
+        expect(article).toHaveProperty('commentCount', expect.any(Number))
+        expect(article).not.toHaveProperty('body')
 
-        // })
+         })
 
         })
 
     })
 
-})
+    test("check the request returns in date descending order", () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then((body) => {
+
+        expect([body._body[0].created_at , body._body[1].created_at,body._body[5].created_at, body._body[9].created_at ]).toBeSorted({descending: true})
+
+         })
+
+        })
+
+
+    })
