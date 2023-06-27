@@ -13,14 +13,14 @@ app.get('/api/topics', getTopics)
 
 app.get('/api/articles/:articles_id', getArticles)
 
-app.use((err, __, res, next) => {
+app.use((err, req, res, next) => {
     if(err.code){
         res.status(400).send({msg: '400 - invalid type request'})
     }
     next(err)
 })
 
-app.use((__, __, res, __) => {
+app.use((err,req, res, next) => {
     res.status(404).send({
         msg:'404 - not found'
     })
