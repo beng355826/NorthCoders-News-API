@@ -11,10 +11,10 @@ const articles = db.query(`SELECT * FROM articles ORDER BY created_at DESC`)
 
 return Promise.all([comments, articles])
 
-.then((array) => {
+.then((promiseArray) => {
 
-const comments = array[0].rows
-const articles = array[1].rows
+const comments = promiseArray[0].rows
+const articles = promiseArray[1].rows
 
    const minusBody = articles.map(article => {
     delete article.body

@@ -77,101 +77,16 @@ describe("GET /api/", () => {
 }) 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 describe("GET /api/articles", () => {
-    test("check the request returns a 200 and has the correct properties", () => {
+    test("Check the request returns a 200 and has the correct properties", () => {
 
         return request(app)
         .get("/api/articles")
         .expect(200)
         .then(({body}) => {
 
-        expect(body).toHaveLength(13)    
-        body.forEach(article => {
+        expect(body.articles).toHaveLength(13)    
+        body.articles.forEach(article => {
         expect(article).toHaveProperty('author', expect.any(String))
         expect(article).toHaveProperty('title', expect.any(String))
         expect(article).toHaveProperty('article_id', expect.any(Number))
@@ -188,13 +103,15 @@ describe("GET /api/articles", () => {
 
     })
 
-    test("check the request returns in date descending order", () => {
+    test("Check the request returns in date descending order", () => {
         return request(app)
         .get("/api/articles")
         .expect(200)
-        .then((body) => {
+        .then(({body}) => {
 
-        expect([body._body[0].created_at , body._body[1].created_at,body._body[5].created_at, body._body[9].created_at ]).toBeSorted({descending: true})
+        const descendingArray = [body.articles[0].created_at , body.articles[1].created_at, body.articles[2].created_at]
+
+        expect(descendingArray).toBeSorted({descending: true})
 
          })
 
