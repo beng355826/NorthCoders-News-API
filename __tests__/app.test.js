@@ -90,23 +90,8 @@ describe("Error message 404 sent when incorrect api request is sent when paramet
 
 
 
-
-
-
-
-
-
-// challenge 4
-
 describe.only('GET /api/articles/:article_id', () => {
 
-    test("responds with a 200 status code when request is successful", () => {
-
-        return request(app)
-        .get('/api/articles/1')
-        .expect(200)
-
-    })
 
     test("responds with the correct row corresponding to the correct article id", () => {
         

@@ -11,18 +11,19 @@ const app = express()
 
 app.get('/api/topics', getTopics)
 
-
 app.get('/api/articles/:articles_id', getArticles)
 
-app.use((err, req, res, next) => {
-
+app.use((err, __, res, next) => {
     if(err.code){
         res.status(400).send({msg: '400 - invalid type request'})
     }
+    next(err)
+})
+
+app.use((__, __, res, __) => {
     res.status(404).send({
         msg:'404 - not found'
     })
-
 })
 
 
