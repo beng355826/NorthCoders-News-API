@@ -3,7 +3,7 @@ const app = require("../db/app")
 const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/index")
-// const { selectTopics } = require("../models/get-api-topics.model")
+
 
 beforeEach(() => {
     return seed(data)
@@ -14,7 +14,7 @@ afterAll(() => {
 })
 
 
-//challenge 2
+
 
 describe('GET /api/topics', () => {
     test('responds with a 200 status code when request is successful', () => {
