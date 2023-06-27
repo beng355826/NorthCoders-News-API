@@ -109,9 +109,7 @@ describe("GET /api/articles", () => {
         .expect(200)
         .then(({body}) => {
 
-        const descendingArray = [body.articles[0].created_at , body.articles[1].created_at, body.articles[2].created_at]
-
-        expect(descendingArray).toBeSorted({descending: true})
+        expect(body.articles).toBeSortedBy('created_at', {descending : true})
 
          })
 
