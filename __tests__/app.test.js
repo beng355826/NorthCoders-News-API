@@ -99,7 +99,7 @@ describe('GET /api/articles/:article_id', () => {
         .get('/api/articles/1')
         .expect(200)
         .then((body) => {
-            console.log(body._body)
+
 
         expect(body._body).toMatchObject({
 
