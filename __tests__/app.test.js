@@ -172,11 +172,11 @@ describe("GET /api/articles", () => {
         .expect(200)
         .then(({body}) => {
 
-        body.forEach(article => {
+        // body.forEach(article => {
 
-            e
+        //     e
             
-        })
+        // })
 
         })
 
