@@ -143,3 +143,105 @@ describe('GET /api/articles/:article_id', () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe("POST /api/articles/:article_id/comments", () => {
+
+    test("status 201 - should respond with the posted comment when the correct properties are provided", () => {
+
+        const comment = {
+            username: "butter_bridge",
+            body: "Ey up lad fancy a jar?"
+        }
+
+        return request(app)
+        .post('/api/articles/3/comments')
+        .send(comment)
+        .expect(201)
+        .then(({body}) => {
+        
+        expect(body.comment).toHaveProperty('comment_id', 19)
+        expect(body.comment).toHaveProperty('body', 'Ey up lad fancy a jar?')
+        expect(body.comment).toHaveProperty('article_id', 3)
+        expect(body.comment).toHaveProperty('author', 'butter_bridge' )
+        expect(body.comment).toHaveProperty('votes', 0)
+        expect(body.comment).toHaveProperty('created_at', expect.any(String))
+
+        }) 
+    })
+
+
+    test.only("sends a 400 when an invalid type request is sent" , () => {
+
+        const comment = {
+            username: "butter_bridge",
+            body: "Ey up lad fancy a jar?"
+        }
+
+        return request(app)
+        .post('/api/articles/notAnId/comments')
+        .send(comment)
+        .expect(400)
+        .then(({body}) => {
+
+        expect(body.comment).toMatchObject({
+            msg:'400 - invalid type request'
+        })
+
+        })
+
+
+    })
+})

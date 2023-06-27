@@ -2,8 +2,11 @@ const express = require("express")
 const {getTopics} = require("../controllers/get-api-topics.controller")
 const {getControllerApi} = require("../controllers/api-get.controller")
 const {getArticles} = require('../controllers/get-articles.controller')
+const {postComment} = require('../controllers/post-comment.controller')
 
 const app = express()
+
+app.use(express.json())
 
 
 //challenge 2
@@ -19,6 +22,16 @@ app.get('/api/articles/:articles_id', getArticles)
 
 //challenge 5
 
+
+
+
+
+
+
+
+
+//challenge 7
+app.post('/api/articles/:article_id/comments', postComment)
 
 
 
