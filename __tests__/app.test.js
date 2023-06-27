@@ -3,6 +3,7 @@ const app = require("../db/app")
 const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/index")
+const sorted = require("jest-sorted")
 
 beforeEach(() => {
     return seed(data)
@@ -137,47 +138,7 @@ describe('GET /api/articles/:article_id', () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
 
     test('responds with an array of comments with the correct properties', () => {
 
@@ -197,11 +158,45 @@ describe.only("GET /api/articles/:article_id/comments", () => {
                 expect(comment).toHaveProperty('body', expect.any(String))
                 expect(comment).toHaveProperty('article_id', expect.any(Number))
             })
+        })
+    })
+
+    test('Comments should be served with the most recent comments first.', () => {
+
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({body}) => {
+
+        expect(body.comments).toBeSortedBy('created_at', {descending:true})
 
         })
+    })
 
+    test('returns a 400 - when an invalid type is sent in the GET request', () => {
 
+        return request(app)
+        .get('/api/articles/NotAnId/comments')
+        .expect(400)
+        .then(({body}) => {
+
+            expect(body).toMatchObject({
+                msg : "400 - invalid type request"
+            })
+        })
     })
 
 
+    test('returns a 404 - when an incorrect article_id is given', () => {
+
+        return request(app)
+        .get('/api/articles/2000/comments')
+        .expect(404)
+        .then(({body}) => {
+
+            expect(body).toMatchObject({
+                msg : '404 - not found'
+            })
+        })
+    })
 })
