@@ -15,7 +15,7 @@ afterAll(() => {
 
 
 
-//challenge 2
+
 describe('GET /api/topics', () => {
     test('responds with a 200 status code when request is successful', () => {
 
@@ -53,7 +53,6 @@ describe("Error message 404 sent when incorrect api request is sent when paramet
 
 
 
-//challenge 3
 describe("GET /api/", () => {
 
     test('Should respond with a description of all available endpoints correctly formatted',() => {
@@ -78,7 +77,7 @@ describe("GET /api/", () => {
 }) 
 
 
-//challenge 4
+
 describe('GET /api/articles/:article_id', () => {
 
 
@@ -143,3 +142,64 @@ describe('GET /api/articles/:article_id', () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+describe.only("GET /api/articles/:article_id/comments", () => {
+
+    test('responds with an array of comments with the correct properties', () => {
+
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(404)
+        .then((body) => {
+
+            // expect(body).toHaveLength(11)
+            // body.forEach(comment => {
+            //     expect(comment).toHaveProperty('comment_id', expect.any(Number))
+            //     expect(comment).toHaveProperty('votes', expect.any(Number))
+            //     expect(comment).toHaveProperty('created_at', expect.any(String))
+            //     expect(comment).toHaveProperty('author', expect.any(String))
+            //     expect(comment).toHaveProperty('body', expect.any(String))
+            //     expect(comment).toHaveProperty('article_id', expect.any(Number))
+            // })
+
+        })
+
+
+    })
+
+
+})
