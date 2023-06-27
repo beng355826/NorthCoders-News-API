@@ -1,16 +1,14 @@
 const db = require("../db/connection")
-const format = require('pg-format')
 
 
 exports.selectArticles = (param) => {
 
-const query = format(
-`SELECT * FROM articles 
-WHERE article_id = %L;`,
-param
-)
+return db.query(
+    
+    `SELECT * FROM articles 
+     WHERE article_id = $1`, [param]
 
-return db.query(query).then((data) => {
+).then((data) => {
 
     
 if(data.rows.length === 0){

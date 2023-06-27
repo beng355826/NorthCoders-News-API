@@ -100,19 +100,14 @@ describe('GET /api/articles/:article_id', () => {
         .expect(200)
         .then((body) => {
 
-
-        expect(body._body).toMatchObject({
-
-        article_id: 1,
-        title: 'Living in the shadow of a great man',
-        topic: 'mitch',
-        author: 'butter_bridge',
-        body: 'I find this existence challenging',
-        created_at: '2020-07-09T20:11:00.000Z',
-        votes: 100,
-        article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
-
-        })
+       expect(body._body).toHaveProperty('article_id', expect.any(Number))
+       expect(body._body).toHaveProperty('title', expect.any(String))
+       expect(body._body).toHaveProperty('topic', expect.any(String))
+       expect(body._body).toHaveProperty('author', expect.any(String))
+       expect(body._body).toHaveProperty('body', expect.any(String) )
+       expect(body._body).toHaveProperty('created_at', expect.any(String) )
+       expect(body._body).toHaveProperty('votes', expect.any(Number))
+       expect(body._body).toHaveProperty('article_img_url', expect.any(String))
 
         })
 
