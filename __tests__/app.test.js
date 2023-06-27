@@ -90,7 +90,7 @@ describe("Error message 404 sent when incorrect api request is sent when paramet
 
 
 
-describe.only('GET /api/articles/:article_id', () => {
+describe('GET /api/articles/:article_id', () => {
 
 
     test("responds with the correct row corresponding to the correct article id", () => {
