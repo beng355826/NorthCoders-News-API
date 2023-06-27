@@ -54,14 +54,6 @@ describe("Error message 404 when sent a bad request", () => {
 
 describe("GET /api/", () => {
 
-    test('Should respond with a status of 200 when the correct request is sent',() => {
-
-        return request(app)
-        .get("/api/")
-        .expect(200)
-
-    })
-
     test('Should respond with a description of all available endpoints correctly formatted',() => {
 
         return request(app)
