@@ -271,6 +271,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     test("sends a 400 an incomplete comment is sent" , () => {
 
         const comment = {
+            
             username: "butter_bridge",
         }
 

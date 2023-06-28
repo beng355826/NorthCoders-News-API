@@ -9,20 +9,15 @@ const app = express()
 app.use(express.json())
 
 
-//challenge 2
+
 app.get('/api/topics', getTopics)
 
 
-//challenge 3
+
 app.get('/api/', getControllerApi )
 
-//challenge 4
+
 app.get('/api/articles/:articles_id', getArticles)
-
-
-//challenge 5
-
-
 
 
 
@@ -43,21 +38,26 @@ app.use((err, req, res, next) => {
     if(err.code === '22P02'){
         res.status(400).send({msg: '400 - invalid type request'})
     }
-    next(err)
-})
-
-app.use((err, req, res, next) => {
-    
     if(err.code === '23502'){
         res.status(400).send({msg: '400 - not found'})
     }
     next(err)
 })
 
+
+
 app.use((err,req, res, next) => {
     res.status(404).send({
         msg:'404 - not found'
     })
+
+    next(err)
+})
+
+
+
+app.use((err, req, res, next) => {
+    res.status(500).send({msg: "500 server error"})
 })
 
 module.exports = app
