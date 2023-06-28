@@ -42,5 +42,17 @@
         }
       ]
     }
-  }
+  },
+
+
+"GET /api/articles/:article_id" : {
+
+  "description": "serves an object with the request article within",
+  "queries" : [],
+  "format" : "n/a",
+  "exampleResponse" : {}
+
+}
+
+
 }

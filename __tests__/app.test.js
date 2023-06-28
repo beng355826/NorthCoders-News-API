@@ -15,8 +15,7 @@ afterAll(() => {
 
 
 
-//challenge 2
-describe.only('GET /api/topics', () => {
+describe(' Challenge 2 - GET /api/topics', () => {
     test('responds with a 200 status code when request is successful', () => {
 
         return request(app)
@@ -53,8 +52,7 @@ describe("Error message 404 sent when incorrect api request is sent when paramet
 
 
 
-//challenge 3
-describe("GET /api/", () => {
+describe(" Challenge 3 - GET /api/", () => {
 
     test('Should respond with a description of all available endpoints correctly formatted',() => {
 
@@ -79,8 +77,8 @@ describe("GET /api/", () => {
 
 
 
-//challenge 4   
-describe('GET /api/articles/:article_id', () => {
+ 
+describe(' Challenge 4 - GET /api/articles/:article_id', () => {
 
     test("responds with the correct row corresponding to the correct article id", () => {
         
@@ -138,8 +136,8 @@ describe('GET /api/articles/:article_id', () => {
 
 
 
-//challenge 5
-describe("GET /api/articles", () => {
+
+describe(" Challenge 5 - GET /api/articles", () => {
 
     test("Check the request returns a 200 and has the correct properties", () => {
 
