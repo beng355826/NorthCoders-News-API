@@ -173,17 +173,18 @@ describe("GET /api/articles/:article_id/comments", () => {
         })
     })
 
-    test('returns a 400 - when an invalid type is sent in the GET request', () => {
+
+    test("returns a 200, when valid ID exists but no comments.", () => {
 
         return request(app)
-        .get('/api/articles/NotAnId/comments')
-        .expect(400)
+        .get('/api/articles/2/comments')
+        .expect(200)
         .then(({body}) => {
 
-            expect(body).toMatchObject({
-                msg : "400 - invalid type request"
-            })
+        expect(body).toMatchObject({ comments: [] })
+
         })
+        
     })
 
 
@@ -199,4 +200,22 @@ describe("GET /api/articles/:article_id/comments", () => {
             })
         })
     })
+
+    test('returns a 400 - when an invalid type is sent in the GET request', () => {
+
+        return request(app)
+        .get('/api/articles/NotAnId/comments')
+        .expect(400)
+        .then(({body}) => {
+
+            expect(body).toMatchObject({
+                msg : "400 - invalid type request"
+            })
+        })
+    })
+
+
+    
+
+
 })
