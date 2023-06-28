@@ -29,21 +29,3 @@ return Promise.all(promises)
 
 
 module.exports = {getArticleComments}
-
-
-// const getArticleComments = (req, res, next) => {
-
-//     const articleId = req.params.article_id
-
-// return selectArticleComments(articleId).then((comments) => {
-
-//     res.status(200).send({comments})
-
-// }).catch((err) => {
-
-//     next(err)
-
-// })
-
-
-// }
