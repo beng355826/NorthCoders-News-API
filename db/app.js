@@ -11,20 +11,12 @@ app.use(express.json())
 
 
 app.get('/api/topics', getTopics)
-
-
-
 app.get('/api/', getControllerApi )
-
-
 app.get('/api/articles/:articles_id', getArticles)
-
-
-//challenge 7
 app.post('/api/articles/:article_id/comments', postComment)
 
 
-//error handlers
+
 app.use((err, req, res, next) => {
 
     if(err.code === '22P02'){
@@ -35,8 +27,6 @@ app.use((err, req, res, next) => {
     }
     next(err)
 })
-
-
 
 app.use((err,req, res, next) => {
     res.status(404).send({

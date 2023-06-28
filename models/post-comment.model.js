@@ -15,5 +15,4 @@ return comment.rows[0]
 
 })
 
-
 }
