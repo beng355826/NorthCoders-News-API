@@ -5,6 +5,8 @@ const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/index")
 const sorted = require("jest-sorted")
 
+const {deleteController} = require("../controllers/delete-comment.controller")
+
 beforeEach(() => {
     return seed(data)
 })
@@ -256,5 +258,49 @@ describe("Challenge 6 - GET /api/articles/:article_id/comments", () => {
 
 
           
+
+})
+
+
+describe("Challenge 9 - DELETE /api/comments/:comment_id", () =>{
+
+    test("responds with a 204 and no content after deleting the specified article", () => {
+
+
+        return request(app)
+        .delete('/api/comments/4')
+        .expect(204)
+
+    })
+
+    test('returns a 400 - when an invalid type is sent', () => {
+
+        return request(app)
+        .delete('/api/comments/NotAnId')
+        .expect(400)
+        .then(({body}) => {
+
+            expect(body).toMatchObject({
+                msg : "400 - invalid type request"
+            })
+        })
+
+    })
+
+
+    test('returns a 404 - when an incorrect article_id is given', () => {
+
+        return request(app)
+        .delete('/api/comments/9999')
+        .expect(404)
+        .then(({body}) => {
+
+
+            expect(body).toMatchObject({
+                msg : '404 - not found'
+            })
+        })
+    })
+    
 
 })
