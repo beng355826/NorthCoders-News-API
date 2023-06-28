@@ -177,7 +177,7 @@ describe(" Challenge 5 - GET /api/articles", () => {
 })
 
     
-describe("GET /api/articles/:article_id/comments", () => {
+describe("Challenge 6 - GET /api/articles/:article_id/comments", () => {
 
     test('responds with an array of comments with the correct properties', () => {
 
@@ -257,4 +257,4 @@ describe("GET /api/articles/:article_id/comments", () => {
 
           
 
-  
+})
