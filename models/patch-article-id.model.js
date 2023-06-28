@@ -11,8 +11,6 @@ return db.query(
 
 ).then((article) => {
 
-console.log(article.rows[0])
-
     if(article.rows[0].length === 0){
         return Promise.reject
     }
