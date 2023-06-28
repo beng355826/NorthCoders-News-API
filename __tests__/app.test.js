@@ -3,6 +3,7 @@ const app = require("../db/app")
 const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const data = require("../db/data/test-data/index")
+const sorted = require("jest-sorted")
 
 beforeEach(() => {
     return seed(data)
@@ -14,9 +15,8 @@ afterAll(() => {
 
 
 
-
 //challenge 2
-describe('GET /api/topics', () => {
+describe.only('GET /api/topics', () => {
     test('responds with a 200 status code when request is successful', () => {
 
         return request(app)
@@ -78,9 +78,9 @@ describe("GET /api/", () => {
 }) 
 
 
-//challenge 4
-describe('GET /api/articles/:article_id', () => {
 
+//challenge 4   
+describe('GET /api/articles/:article_id', () => {
 
     test("responds with the correct row corresponding to the correct article id", () => {
         
@@ -98,11 +98,11 @@ describe('GET /api/articles/:article_id', () => {
        expect(body._body).toHaveProperty('votes', 100 )
        expect(body._body).toHaveProperty('article_img_url', 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700' )
 
+
         })
 
 
     })
-
 
     test("responds with the correct error message when sent an invalid type (not a number)", () => {
         
@@ -138,8 +138,51 @@ describe('GET /api/articles/:article_id', () => {
 
 
 
+//challenge 5
+describe("GET /api/articles", () => {
+
+    test("Check the request returns a 200 and has the correct properties", () => {
+
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({body}) => {
+
+        expect(body.articles).toHaveLength(13)    
+        body.articles.forEach(article => {
+        expect(article).toHaveProperty('author', expect.any(String))
+        expect(article).toHaveProperty('title', expect.any(String))
+        expect(article).toHaveProperty('article_id', expect.any(Number))
+        expect(article).toHaveProperty('topic', expect.any(String))
+        expect(article).toHaveProperty('created_at', expect.any(String))
+        expect(article).toHaveProperty('votes', expect.any(Number))
+        expect(article).toHaveProperty('article_img_url', expect.any(String))
+        expect(article).toHaveProperty('commentCount', expect.any(Number))
+        expect(article).not.toHaveProperty('body')
+
+         })
+
+        })
+    })
+      
+      test("Check the request returns in date descending order", () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({body}) => {
+
+        expect(body.articles).toBeSortedBy('created_at', {descending : true})
+
+        })
+
+    })
+
+})
+
+    
+
+          
 
 
 
-
-
+          
