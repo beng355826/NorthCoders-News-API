@@ -199,7 +199,7 @@ describe('GET /api/articles/:article_id', () => {
 
 describe("POST /api/articles/:article_id/comments", () => {
 
-    test.only("status 201 - should respond with the posted comment when the correct properties are provided", () => {
+    test("status 201 - should respond with the posted comment when the correct properties are provided", () => {
 
         const comment = {
             username: "butter_bridge",
@@ -236,7 +236,7 @@ describe("POST /api/articles/:article_id/comments", () => {
         .expect(400)
         .then(({body}) => {
 
-        expect(body.comment).toMatchObject({
+        expect(body).toMatchObject({
             msg:'400 - invalid type request'
         })
 
@@ -244,4 +244,49 @@ describe("POST /api/articles/:article_id/comments", () => {
 
 
     })
+
+    test("sends a 404 when an invalid article_id number is sent" , () => {
+
+        const comment = {
+            username: "butter_bridge",
+            body: "Ey up lad fancy a jar?"
+        }
+
+        return request(app)
+        .post('/api/articles/9000/comments')
+        .send(comment)
+        .expect(404)
+        .then(({body}) => {
+
+        expect(body).toMatchObject({
+            msg:'404 - not found'
+        })
+
+        })
+
+
+    })
+
+
+    test("sends a 400 an incomplete comment is sent" , () => {
+
+        const comment = {
+            username: "butter_bridge",
+        }
+
+        return request(app)
+        .post('/api/articles/9000/comments')
+        .send(comment)
+        .expect(400)
+        .then(({body}) => {
+
+        expect(body).toMatchObject({
+            msg:'400 - not found'
+        })
+
+        })
+
+
+    })
+
 })

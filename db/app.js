@@ -39,8 +39,17 @@ app.post('/api/articles/:article_id/comments', postComment)
 
 //error handlers
 app.use((err, req, res, next) => {
-    if(err.code){
+
+    if(err.code === '22P02'){
         res.status(400).send({msg: '400 - invalid type request'})
+    }
+    next(err)
+})
+
+app.use((err, req, res, next) => {
+    
+    if(err.code === '23502'){
+        res.status(400).send({msg: '400 - not found'})
     }
     next(err)
 })

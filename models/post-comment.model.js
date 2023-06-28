@@ -11,6 +11,8 @@ RETURNING *; `,
 
 ).then((comment) => {
 
+    console.log(comment)
+
 return comment.rows[0]
 
 })
