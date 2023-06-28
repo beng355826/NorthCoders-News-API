@@ -137,66 +137,6 @@ describe('GET /api/articles/:article_id', () => {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 describe("POST /api/articles/:article_id/comments", () => {
 
     test("status 201 - should respond with the posted comment when the correct properties are provided", () => {
@@ -245,29 +185,6 @@ describe("POST /api/articles/:article_id/comments", () => {
 
     })
 
-    test("sends a 404 when an invalid article_id number is sent" , () => {
-
-        const comment = {
-            username: "butter_bridge",
-            body: "Ey up lad fancy a jar?"
-        }
-
-        return request(app)
-        .post('/api/articles/9000/comments')
-        .send(comment)
-        .expect(404)
-        .then(({body}) => {
-
-        expect(body).toMatchObject({
-            msg:'404 - not found'
-        })
-
-        })
-
-
-    })
-
-
     test("sends a 400 an incomplete comment is sent" , () => {
 
         const comment = {
@@ -283,6 +200,30 @@ describe("POST /api/articles/:article_id/comments", () => {
 
         expect(body).toMatchObject({
             msg:'400 - not found'
+        })
+
+        })
+
+
+    })
+
+    
+
+    test("sends a 404 when an invalid article_id number is sent" , () => {
+
+        const comment = {
+            username: "butter_bridge",
+            body: "Ey up lad fancy a jar?"
+        }
+
+        return request(app)
+        .post('/api/articles/9000/comments')
+        .send(comment)
+        .expect(404)
+        .then(({body}) => {
+
+        expect(body).toMatchObject({
+            msg:'404 - not found'
         })
 
         })

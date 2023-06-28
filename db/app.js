@@ -20,16 +20,8 @@ app.get('/api/', getControllerApi )
 app.get('/api/articles/:articles_id', getArticles)
 
 
-
-
-
-
-
 //challenge 7
 app.post('/api/articles/:article_id/comments', postComment)
-
-
-
 
 
 //error handlers
