@@ -32,6 +32,8 @@ describe(' Challenge 2 - GET /api/topics', () => {
         .expect(200)
         .then(({body}) => {
 
+            expect(body.AllTopics).toHaveLength(3)
+            
             body.AllTopics.forEach(topic => {
                 expect(topic).toHaveProperty('slug', expect.any(String))
                 expect(topic).toHaveProperty('description', expect.any(String))
@@ -618,6 +620,8 @@ describe("Challenge 10 - GET /api/users", () => {
         .get('/api/users')
         .expect(200)
         .then(({body}) => {
+
+        expect(body.users).toHaveLength(4)
 
             body.users.forEach(user => {
                 expect(user).toHaveProperty('username', expect.any(String))
