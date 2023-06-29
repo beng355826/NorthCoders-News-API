@@ -306,6 +306,29 @@ describe("Challenge 8 - PATCH /api/articles/:article_id ", () => {
 
     })
 
+    test("responds with correct article with an updated vote property and ignores any invalid properties on the request body", () => {
+
+        const update = { inc_votes: -10,
+                         ignorableProperty : 'please ignore me'}
+
+        return request(app)
+        .patch('/api/articles/3')
+        .send(update)
+        .expect(200)
+        .then((article) => {
+
+            expect(article._body).toHaveProperty('article_id', 3 )
+            expect(article._body).toHaveProperty('title', expect.any(String))
+            expect(article._body).toHaveProperty('topic', expect.any(String))
+            expect(article._body).toHaveProperty('author', expect.any(String))
+            expect(article._body).toHaveProperty('body', expect.any(String))
+            expect(article._body).toHaveProperty('created_at', expect.any(String))
+            expect(article._body).toHaveProperty('votes', -10)
+            expect(article._body).toHaveProperty('article_img_url', expect.any(String))
+        })
+
+    })
+
 
     test("returns a 400 when sent an invalid type (not a number)", () => {
         
@@ -324,7 +347,7 @@ describe("Challenge 8 - PATCH /api/articles/:article_id ", () => {
         })
     })
 
-    test("returns a 404 when sent a correct type but the endpoint does not exist", () => {
+    test("returns a 404 when sent a correct type but the article id does not exist", () => {
         
         const update = { inc_votes: -10 }
 

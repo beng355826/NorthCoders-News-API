@@ -5,6 +5,7 @@ const {getArticles} = require('../controllers/get-articles.controller')
 const {getArticleComments} = require('../controllers/get-article-comments.controller')
 const { getAllArticles } = require("../controllers/get-All-Articles.controller")
 const {patchArticleId} = require("../controllers/patch-article-id.controller")
+const { error400Handler, error404Handler, error500Handler } = require("./errorHandlers")
 
 const app = express()
 app.use(express.json())
@@ -21,29 +22,9 @@ app.patch('/api/articles/:article_id', patchArticleId)
 
 
 
-app.use((err, req, res, next) => {
-
-    if(err.code === '22P02'){
-        res.status(400).send({msg: '400 - invalid type request'})
-    }
-    if(err.code === '23502'){
-        res.status(400).send({msg: '400 - not found'})
-    }
-    next(err)
-})
-
-
-app.use((err,req, res, next) => {
-
-    res.status(404).send({
-        msg:'404 - not found'
-    })
-    next(err)
-})
-
-app.use((err, req, res, next) => {
-    res.status(500).send({msg: "500 server error"})
-})
+app.use(error400Handler)
+app.use(error404Handler)
+app.use(error500Handler)
 
 
 
