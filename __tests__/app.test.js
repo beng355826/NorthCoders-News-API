@@ -32,6 +32,8 @@ describe(' Challenge 2 - GET /api/topics', () => {
         .expect(200)
         .then(({body}) => {
 
+            expect(body.AllTopics).toHaveLength(3)
+            
             body.AllTopics.forEach(topic => {
                 expect(topic).toHaveProperty('slug', expect.any(String))
                 expect(topic).toHaveProperty('description', expect.any(String))
@@ -605,5 +607,31 @@ describe("Challenge 9 - DELETE /api/comments/:comment_id", () =>{
         })
     })
     
+
+})
+
+
+
+
+describe("Challenge 10 - GET /api/users", () => {
+    test("responds with 200 and an array of objects with the correct properties", () => {
+
+        return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({body}) => {
+
+        expect(body.users).toHaveLength(4)
+
+            body.users.forEach(user => {
+                expect(user).toHaveProperty('username', expect.any(String))
+                expect(user).toHaveProperty('name', expect.any(String))
+                expect(user).toHaveProperty('avatar_url', expect.any(String))
+            })
+
+        })
+
+    })
+
 
 })

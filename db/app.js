@@ -7,7 +7,9 @@ const {getArticleComments} = require('../controllers/get-article-comments.contro
 const { getAllArticles } = require("../controllers/get-All-Articles.controller")
 const {deleteComment} = require("../controllers/delete-comment.controller")
 const {patchArticleId} = require("../controllers/patch-article-id.controller")
+const {getUsers} = require("../controllers/get-users.controller")
 const { error400Handler, error404Handler, error500Handler } = require("./errorHandlers")
+
 
 const app = express()
 app.use(express.json())
@@ -22,6 +24,8 @@ app.get('/api/articles/:article_id/comments', getArticleComments)
 app.post('/api/articles/:article_id/comments', postComment)
 app.patch('/api/articles/:article_id', patchArticleId)
 app.delete('/api/comments/:comment_id', deleteComment)
+
+app.get('/api/users',getUsers)
 
 app.use(error400Handler)
 app.use(error404Handler)
