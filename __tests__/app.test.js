@@ -260,6 +260,71 @@ describe("Challenge 6 - GET /api/articles/:article_id/comments", () => {
 })
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 describe("Challenge 8 - PATCH /api/articles/:article_id ", () => {
     test("responds with correct article with an updated vote property when the increment is positive", () => {
 
@@ -330,7 +395,7 @@ describe("Challenge 8 - PATCH /api/articles/:article_id ", () => {
     })
 
 
-    test("returns a 400 when sent an invalid type (not a number)", () => {
+    test("returns a 400 when the endpoint is provided with an invalid article_id (not a number)", () => {
         
         const update = { inc_votes: -10 }
 
@@ -347,7 +412,7 @@ describe("Challenge 8 - PATCH /api/articles/:article_id ", () => {
         })
     })
 
-    test("returns a 404 when sent a correct type but the article id does not exist", () => {
+    test("returns a 404 when sent an article ID (correct type) but the resource does not exist", () => {
         
         const update = { inc_votes: -10 }
 
