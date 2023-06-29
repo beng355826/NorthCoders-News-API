@@ -399,3 +399,144 @@ describe("Challenge 7 - POST /api/articles/:article_id/comments", () => {
 
 })
 
+
+describe("Challenge 8 - PATCH /api/articles/:article_id ", () => {
+    test("responds with correct article with an updated vote property when the increment is positive", () => {
+
+        const update = { inc_votes: 1 }
+
+        return request(app)
+        .patch('/api/articles/3')
+        .send(update)
+        .expect(200)
+        .then((article) => {
+
+            expect(article._body).toHaveProperty('article_id', 3 )
+            expect(article._body).toHaveProperty('title', expect.any(String))
+            expect(article._body).toHaveProperty('topic', expect.any(String))
+            expect(article._body).toHaveProperty('author', expect.any(String))
+            expect(article._body).toHaveProperty('body', expect.any(String))
+            expect(article._body).toHaveProperty('created_at', expect.any(String))
+            expect(article._body).toHaveProperty('votes', 1)
+            expect(article._body).toHaveProperty('article_img_url', expect.any(String))
+        })
+
+    })
+
+
+    test("responds with correct article with an updated vote property when the increment is negative", () => {
+
+        const update = { inc_votes: -10 }
+
+        return request(app)
+        .patch('/api/articles/3')
+        .send(update)
+        .expect(200)
+        .then((article) => {
+
+            expect(article._body).toHaveProperty('article_id', 3 )
+            expect(article._body).toHaveProperty('title', expect.any(String))
+            expect(article._body).toHaveProperty('topic', expect.any(String))
+            expect(article._body).toHaveProperty('author', expect.any(String))
+            expect(article._body).toHaveProperty('body', expect.any(String))
+            expect(article._body).toHaveProperty('created_at', expect.any(String))
+            expect(article._body).toHaveProperty('votes', -10)
+            expect(article._body).toHaveProperty('article_img_url', expect.any(String))
+        })
+
+    })
+
+    test("responds with correct article with an updated vote property and ignores any invalid properties on the request body", () => {
+
+        const update = { inc_votes: -10,
+                         ignorableProperty : 'please ignore me'}
+
+        return request(app)
+        .patch('/api/articles/3')
+        .send(update)
+        .expect(200)
+        .then((article) => {
+
+            expect(article._body).toHaveProperty('article_id', 3 )
+            expect(article._body).toHaveProperty('title', expect.any(String))
+            expect(article._body).toHaveProperty('topic', expect.any(String))
+            expect(article._body).toHaveProperty('author', expect.any(String))
+            expect(article._body).toHaveProperty('body', expect.any(String))
+            expect(article._body).toHaveProperty('created_at', expect.any(String))
+            expect(article._body).toHaveProperty('votes', -10)
+            expect(article._body).toHaveProperty('article_img_url', expect.any(String))
+        })
+
+    })
+
+
+    test("returns a 400 when the endpoint is provided with an invalid article_id (not a number)", () => {
+        
+        const update = { inc_votes: -10 }
+
+        return request(app)
+        .patch('/api/articles/notAnId')
+        .send(update)
+        .expect(400)
+        .then((article) => {
+
+        expect(article._body).toMatchObject(
+            {msg:'400 - invalid type request'}
+            )
+
+        })
+    })
+
+    test("returns a 404 when sent an article ID (correct type) but the resource does not exist", () => {
+        
+        const update = { inc_votes: -10 }
+
+        return request(app)
+        .patch('/api/articles/9999')
+        .send(update)
+        .expect(404)
+        .then((article) => {
+
+        expect(article._body).toMatchObject(
+            {msg:'404 - not found'})
+
+        })
+    })
+
+
+    test("returns a 400 when sent a request body that violates the not null constraint", () => {
+        
+        const update = {}
+
+        return request(app)
+        .patch('/api/articles/3')
+        .send(update)
+        .expect(400)
+        .then((article) => {
+
+        expect(article._body).toMatchObject(
+            {msg:'400 - not found'})
+
+        })
+    })
+
+    test("returns a 400 when sent an invalid type on the request body", () => {
+        
+        const update = {inc_votes: "a String"}
+
+        return request(app)
+        .patch('/api/articles/3')
+        .send(update)
+        .expect(400)
+        .then((article) => {
+
+        expect(article._body).toMatchObject(
+            {msg:'400 - invalid type request'})
+
+        })
+    })
+
+
+})
+
+
