@@ -273,6 +273,32 @@ describe("Challenge 9 - DELETE /api/comments/:comment_id", () =>{
 
     })
 
+
+   
+    test("responds with a 204 and checks the requested comments is deleted", () => {
+
+        return request(app)
+        .delete('/api/comments/4')
+        .expect(204)
+        .then(() => {
+
+            return db.query(
+                `SELECT * FROM comments;`
+            ).then((body) => {
+                return body.rows
+            }).then((comments) => {
+                comments.forEach(comment => {
+
+                expect(comment).not.toHaveProperty('body', " I carry a log — yes. Is it funny to you? It is not to me." )
+
+                })
+            })
+
+        })
+
+
+    })
+
     test('returns a 400 - when an invalid type is sent', () => {
 
         return request(app)
