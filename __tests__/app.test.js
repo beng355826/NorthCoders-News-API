@@ -162,6 +162,33 @@ describe("Challenge 7 - POST /api/articles/:article_id/comments", () => {
         }) 
     })
 
+    test("status 201 - should ignore unnecessary properties in the request body and respond with the posted comment with the correct properties", () => {
+
+        const comment = {
+            username: "butter_bridge",
+            body: "Ey up lad fancy a jar?",
+            ignorableProperty: "should ignore as its not a valid column in the table"
+        }
+
+        return request(app)
+        .post('/api/articles/3/comments')
+        .send(comment)
+        .expect(201)
+        .then(({body}) => {
+        
+        expect(body.comment).toHaveProperty('comment_id', 19)
+        expect(body.comment).toHaveProperty('body', 'Ey up lad fancy a jar?')
+        expect(body.comment).toHaveProperty('article_id', 3)
+        expect(body.comment).toHaveProperty('author', 'butter_bridge' )
+        expect(body.comment).toHaveProperty('votes', 0)
+        expect(body.comment).toHaveProperty('created_at', expect.any(String))
+
+        }) 
+    })
+    
+
+
+
 
     test("sends a 400 when an invalid type request is sent" , () => {
 
@@ -209,6 +236,27 @@ describe("Challenge 7 - POST /api/articles/:article_id/comments", () => {
 
         const comment = {
             username: "butter_bridge",
+            body: "Ey up lad fancy a jar?"
+        }
+
+        return request(app)
+        .post('/api/articles/9000/comments')
+        .send(comment)
+        .expect(404)
+        .then(({body}) => {
+
+        expect(body).toMatchObject({
+            msg:'404 - not found'
+        })
+
+        })
+
+    })
+
+    test("sends a 404 when a username does not exist" , () => {
+
+        const comment = {
+            username: "BennyG",
             body: "Ey up lad fancy a jar?"
         }
 
