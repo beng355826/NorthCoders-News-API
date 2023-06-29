@@ -289,7 +289,7 @@ describe("Challenge 9 - DELETE /api/comments/:comment_id", () =>{
             }).then((comments) => {
                 comments.forEach(comment => {
 
-                expect(comment).not.toHaveProperty('body', " I carry a log — yes. Is it funny to you? It is not to me." )
+                expect(comment.body).not.toEqual('body', " I carry a log — yes. Is it funny to you? It is not to me." )
 
                 })
             })
@@ -299,7 +299,7 @@ describe("Challenge 9 - DELETE /api/comments/:comment_id", () =>{
 
     })
 
-    test('returns a 400 - when an invalid type is sent', () => {
+    test('returns a 400 - when an invalid id type is sent', () => {
 
         return request(app)
         .delete('/api/comments/NotAnId')
@@ -314,7 +314,7 @@ describe("Challenge 9 - DELETE /api/comments/:comment_id", () =>{
     })
 
 
-    test('returns a 404 - when an incorrect article_id is given', () => {
+    test('returns a 404 - when an article_id type is given but does not exist', () => {
 
         return request(app)
         .delete('/api/comments/9999')

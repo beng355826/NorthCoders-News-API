@@ -5,7 +5,7 @@ const deleteComment = (req, res, next) => {
     const commentId = req.params.comment_id
 
 return deleteCommentFromDb(commentId).then((deletedCom) => {
-//console.log(deletedCom)
+
 res.sendStatus(204)
 
 }).catch((err) => {
