@@ -146,7 +146,7 @@ describe(" Challenge 5 - GET /api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then(({body}) => {
-
+            //console.log(body.articles, '<--- challenge 5 body')
         expect(body.articles).toHaveLength(13)    
         body.articles.forEach(article => {
         expect(article).toHaveProperty('author', expect.any(String))
@@ -169,12 +169,105 @@ describe(" Challenge 5 - GET /api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then(({body}) => {
-
         expect(body.articles).toBeSortedBy('created_at', {descending : true})
 
         })
 
     })
+
+})
+
+describe("Challenge 11 - /api/articles (queries)", () => {
+
+
+    test("responds with 200 and shows the articles with the specified query value and that they are correctly formatted", () => {
+
+        return request(app)
+        .get('/api/articles?topic=mitch')
+        .expect(200)
+        .then(({body}) => {
+
+            //console.log(body.articles)
+        expect(body.articles).toHaveLength(12)
+
+        body.articles.forEach(article => {
+            expect(article).toHaveProperty('topic', 'mitch')
+            expect(article).toHaveProperty('created_at', expect.any(String))
+            expect(article).toHaveProperty('votes', expect.any(Number))
+            expect(article).toHaveProperty('article_img_url', expect.any(String))
+            expect(article).toHaveProperty('commentCount', expect.any(Number))
+            expect(article).not.toHaveProperty('body')
+        })
+        })
+    })
+
+    test("Checks the query request returns in date descending order as a default", () => {
+        return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then(({body}) => {
+
+        expect(body.articles).toBeSortedBy('created_at', {descending : true})
+            
+        })
+
+    })
+
+
+    test("200 -articles filtered by topic with articles sorted by the value specified in the default descending order", () => {
+
+        return request(app)
+        .get('/api/articles?topic=mitch&sort_by=votes')
+        .expect(200)
+        .then(({body}) => {
+
+            expect(body.articles).toHaveLength(12)
+
+            body.articles.forEach(article => {
+                expect(article).toHaveProperty('topic', 'mitch')
+                expect(article).toHaveProperty('created_at', expect.any(String))
+                expect(article).toHaveProperty('votes', expect.any(Number))
+                expect(article).toHaveProperty('article_img_url', expect.any(String))
+                expect(article).toHaveProperty('commentCount', expect.any(Number))
+                expect(article).not.toHaveProperty('body')
+
+        })
+            expect(body.articles).toBeSortedBy('votes', {descending : true})
+    })
+
+    })
+
+    test.only("200 - articles filtered by topic with articles sorted by the value specified in ascending", () => {
+
+        return request(app)
+        .get('/api/articles?topic=mitch&sort_by=article_id&order=desc')
+        .expect(200)
+//         .then(({body}) => {
+// console.log(body.articles)
+//             expect(body.articles).toHaveLength(12)
+//             expect(body.articles[0].author).toBe('butter_bridge')
+//             expect(body.articles[11].votes).toBe('rogersop')
+
+//         })
+    })
+
+    test("", () => {
+
+        return request(app)
+        .get('/api/articles?sort_by=votes')
+        .expect(200)
+        
+    })
+
+    test("", () => {
+
+        return request(app)
+        .get('/api/articles?sort_by=votes&order=asc')
+        .expect(200)
+        
+    })
+
+
 
 })
 
@@ -635,3 +728,5 @@ describe("Challenge 10 - GET /api/users", () => {
 
 
 })
+
+
