@@ -81,61 +81,6 @@ describe(" Challenge 3 - GET /api/", () => {
 
 
  
-describe(' Challenge 4 - GET /api/articles/:article_id', () => {
-
-    test("responds with the correct row corresponding to the correct article id", () => {
-        
-        return request(app)
-        .get('/api/articles/1')
-        .expect(200)
-        .then((body) => {
-
-       expect(body._body).toHaveProperty('article_id', 1)
-       expect(body._body).toHaveProperty('title', 'Living in the shadow of a great man')
-       expect(body._body).toHaveProperty('topic', 'mitch' )
-       expect(body._body).toHaveProperty('author', 'butter_bridge' )
-       expect(body._body).toHaveProperty('body', 'I find this existence challenging' )
-       expect(body._body).toHaveProperty('created_at', '2020-07-09T20:11:00.000Z' )
-       expect(body._body).toHaveProperty('votes', 100 )
-       expect(body._body).toHaveProperty('article_img_url', 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700' )
-
-
-        })
-
-
-    })
-
-    test("responds with the correct error message when sent an invalid type (not a number)", () => {
-        
-        return request(app)
-        .get('/api/articles/notAnId')
-        .expect(400)
-        .then((body) => {
-
-        expect(body._body).toMatchObject({
-            msg:'400 - invalid type request'
-        })
-
-        })
-
-    })
-
-    test("responds with the correct error message when sent a correct type but invalid", () => {
-        
-        return request(app)
-        .get('/api/articles/9999')
-        .expect(404)
-        .then((body) => {
-
-        expect(body._body).toMatchObject({
-            msg:'404 - not found'
-        })
-
-        })
-
-})
-
-})
 
 
 describe(" Challenge 5 - GET /api/articles", () => {
@@ -270,8 +215,8 @@ describe("Challenge 7 - POST /api/articles/:article_id/comments", () => {
     test("status 201 - should respond with the posted comment when the correct properties are provided", () => {
 
         const comment = {
-            username: "butter_bridge",
-            body: "Ey up lad fancy a jar?"
+            "username": "butter_bridge",
+            "body": "Ey up lad fancy a jar?"
         }
 
         return request(app)
@@ -279,7 +224,7 @@ describe("Challenge 7 - POST /api/articles/:article_id/comments", () => {
         .send(comment)
         .expect(201)
         .then(({body}) => {
-        
+    
         expect(body.comment).toHaveProperty('comment_id', 19)
         expect(body.comment).toHaveProperty('body', 'Ey up lad fancy a jar?')
         expect(body.comment).toHaveProperty('article_id', 3)
@@ -774,7 +719,7 @@ describe("Challenge 11 - /api/articles (queries)", () => {
         .expect(400)
         .then(({body}) => {
 
-            console.log(body)
+        
             expect(body).toEqual({ msg: '400 query does not exist' })
         })
 
@@ -787,10 +732,95 @@ describe("Challenge 11 - /api/articles (queries)", () => {
         .expect(400)
         .then(({body}) => {
 
-            console.log(body)
             expect(body).toEqual({ msg: '400 query does not exist' })
         })
 
     })
+
+})
+
+
+
+describe(' Challenge 4 - GET /api/articles/:article_id', () => {
+
+    test("responds with the correct row corresponding to the correct article id", () => {
+        
+        return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then((body) => {
+
+       expect(body._body).toHaveProperty('article_id', 1)
+       expect(body._body).toHaveProperty('title', 'Living in the shadow of a great man')
+       expect(body._body).toHaveProperty('topic', 'mitch' )
+       expect(body._body).toHaveProperty('author', 'butter_bridge' )
+       expect(body._body).toHaveProperty('body', 'I find this existence challenging' )
+       expect(body._body).toHaveProperty('created_at', '2020-07-09T20:11:00.000Z' )
+       expect(body._body).toHaveProperty('votes', 100 )
+       expect(body._body).toHaveProperty('article_img_url', 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700' )
+
+
+        })
+
+
+    })
+
+    test("responds with the correct error message when sent an invalid type (not a number)", () => {
+        
+        return request(app)
+        .get('/api/articles/notAnId')
+        .expect(400)
+        .then((body) => {
+
+        expect(body._body).toMatchObject({
+            msg:'400 - invalid type request'
+        })
+
+        })
+
+    })
+
+    test("responds with the correct error message when sent a correct type but invalid", () => {
+        
+        return request(app)
+        .get('/api/articles/9999')
+        .expect(404)
+        .then((body) => {
+
+        expect(body._body).toMatchObject({
+            msg:'404 - not found'
+        })
+
+        })
+
+})
+
+})
+
+
+
+
+describe("Challenge 12 test", () => {
+test('respond with an article Object with a comment_count', () =>{
+
+    return request(app)
+    .get('/api/articles/1')
+    .expect(200)
+    .then((body) => {
+
+       expect(body._body).toHaveProperty('article_id', 1)
+       expect(body._body).toHaveProperty('title', 'Living in the shadow of a great man')
+       expect(body._body).toHaveProperty('topic', 'mitch' )
+       expect(body._body).toHaveProperty('author', 'butter_bridge' )
+       expect(body._body).toHaveProperty('body', 'I find this existence challenging' )
+       expect(body._body).toHaveProperty('created_at', '2020-07-09T20:11:00.000Z' )
+       expect(body._body).toHaveProperty('votes', 100 )
+       expect(body._body).toHaveProperty('article_img_url', 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700' )
+       expect(body._body).toHaveProperty('comment_count', 11)
+    
+    })
+    
+
+})
 
 })

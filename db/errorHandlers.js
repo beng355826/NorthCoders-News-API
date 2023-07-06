@@ -16,9 +16,6 @@ const error400Handler = (err, req, res, next) => {
 
 const error404Handler = (err,req, res, next) => {
 
-    
-
-
     if(err.code === '42703'){
         res.status(404).send({msg: '404 - column does not exist'})
     }
