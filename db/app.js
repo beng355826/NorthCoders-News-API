@@ -13,10 +13,10 @@ const { error400Handler, error404Handler, error500Handler } = require("./errorHa
 const cors = require('cors')
 
 
+const app = express()
 
 
 app.use(cors());
-const app = express()
 app.use(express.json())
 
 
