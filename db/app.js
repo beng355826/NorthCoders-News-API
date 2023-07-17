@@ -10,8 +10,12 @@ const {patchArticleId} = require("../controllers/patch-article-id.controller")
 const {getUsers} = require("../controllers/get-users.controller")
 const {queryTopic} = require("../controllers/queryTopic.controller")
 const { error400Handler, error404Handler, error500Handler } = require("./errorHandlers")
+const cors = require('cors')
 
 
+
+
+app.use(cors());
 const app = express()
 app.use(express.json())
 
