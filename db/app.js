@@ -8,10 +8,15 @@ const { getAllArticles } = require("../controllers/get-All-Articles.controller")
 const {deleteComment} = require("../controllers/delete-comment.controller")
 const {patchArticleId} = require("../controllers/patch-article-id.controller")
 const {getUsers} = require("../controllers/get-users.controller")
+const {queryTopic} = require("../controllers/queryTopic.controller")
 const { error400Handler, error404Handler, error500Handler } = require("./errorHandlers")
+const cors = require('cors')
 
 
 const app = express()
+
+
+app.use(cors());
 app.use(express.json())
 
 
@@ -24,6 +29,8 @@ app.get('/api/articles/:article_id/comments', getArticleComments)
 app.post('/api/articles/:article_id/comments', postComment)
 app.patch('/api/articles/:article_id', patchArticleId)
 app.delete('/api/comments/:comment_id', deleteComment)
+
+app.get('api/articles?sort_by=:value', queryTopic)
 
 app.get('/api/users',getUsers)
 
