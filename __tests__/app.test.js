@@ -350,7 +350,7 @@ describe("Challenge 7 - POST /api/articles/:article_id/comments", () => {
 })
 
 
-describe("Challenge 8 - PATCH /api/articles/:article_id ", () => {
+describe.only("Challenge 8 - PATCH /api/articles/:article_id ", () => {
     test("responds with correct article with an updated vote property when the increment is positive", () => {
 
         const update = { inc_votes: 1 }
