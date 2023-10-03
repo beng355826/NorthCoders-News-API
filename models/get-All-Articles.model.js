@@ -19,19 +19,6 @@ exports.selectAllArticles = (queryBody) => {
     return Promise.reject({msg : '400 query does not exist' });
   }
 
-  // if(!['topic', 'sort_by', 'order'].includes(queryBody.order)){
-
-  // }
-
-  // if(queryBody.order){
-
-  //   if(query.body !== 'desc'){
-
-  //     if(query.body !== 'asc'){
-  //       Promise.reject()
-  //     }}
-
-  //   }
 
   let queryStr;
   const queryValues = [];
