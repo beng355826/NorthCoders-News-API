@@ -1,22 +1,14 @@
 const express = require("express")
-// const {getTopics} = require("./controllers/get-api-topics.controller")
-// const {getControllerApi} = require("./controllers/api-get.controller")
-// const {getArticles} = require('./controllers/get-articles.controller')
-// const {postComment} = require('./controllers/post-comment.controller')
-// const {getArticleComments} = require('./controllers/get-article-comments.controller')
-// const {getAllArticles} = require("./controllers/get-All-Articles.controller")
-// const {deleteComment} = require("./controllers/delete-comment.controller")
-// const {patchArticleId} = require("./controllers/patch-article-id.controller")
-// const {getUsers} = require("./controllers/get-users.controller")
-// const {queryTopic} = require("./controllers/queryTopic.controller")
 const { error400Handler, error404Handler, error500Handler } = require("./errorHandlers")
 const cors = require('cors')
+const app = express()
+
 const apiRouter = require('./routes/api-router')
 const articlesRouter = require('./routes/articles-router')
 const topicsRouter = require("./routes/topics-router")
 const commentsRouter = require('./routes/comments-router')
 const usersRouter = require("./routes/users-router")
-const app = express()
+
 
 
 app.use(cors());
@@ -26,25 +18,6 @@ app.use('/api/articles', articlesRouter)
 app.use('/api/topics', topicsRouter)
 app.use('/api/comments', commentsRouter)
 app.use('/api/users', usersRouter)
-
-
-// app.get('/api/topics', getTopics)
-
-// app.delete('/api/comments/:comment_id', deleteComment)
-
-// app.get('/api/users',getUsers)
-
-// app.get('/api/', getControllerApi )
-
-
-
-// app.get('/api/articles/:articles_id', getArticles)
-// app.get('/api/articles', getAllArticles )
-// app.get('/api/articles/:article_id/comments', getArticleComments)
-// app.post('/api/articles/:article_id/comments', postComment)
-// app.patch('/api/articles/:article_id', patchArticleId)
-// app.get('api/articles?sort_by=:value', queryTopic)
-
 
 
 app.use(error400Handler)

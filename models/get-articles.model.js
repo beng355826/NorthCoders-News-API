@@ -2,7 +2,7 @@ const db = require("../db/connection")
 
 
 exports.selectArticles = (param) => {
-
+console.log(typeof param);
 return db.query(
     
     `SELECT articles.*, SUM(comments.article_id)::INT AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id

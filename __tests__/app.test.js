@@ -650,11 +650,45 @@ describe("Challenge 12 - GET /api/articles/:article_id (comment_count)", () => {
   });
 });
 
-describe('Challenge 16 ', () => {
+describe.only('Challenge 17  /api/users/:username', () => {
     
-
-    it('', () => {
+    it('responds with a user object with the correct properties', () => {
         
+        return request(app)
+        .get('/api/users/rogersop')
+        .expect(200)
+        .then(({body}) => {
+
+            expect(body).toHaveProperty('username', 'rogersop')
+            expect(body).toHaveProperty('name' , 'paul')
+            expect(body).toHaveProperty('avatar_url', 'https://avatars2.githubusercontent.com/u/24394918?s=400&v=4' )
+        })
+    });
+
+    it('return 404 user not found when an invalid user is provided', () => {
+        
+        return request(app)
+        .get('/api/users/notauser')
+        .expect(404)
+        .then(( {body}) => {
+            expect(body).toEqual({
+                msg:'404 - not found'
+            })
+    })  
+
+    });
+
+    it('return 404 user not found when an invalid user is provided', () => {
+        
+        return request(app)
+        .get('/api/users/500')
+        .expect(404)
+        .then(( {body}) => {
+            expect(body).toEqual({
+                msg:'404 - not found'
+            })
+    })  
+
     });
 
 });
