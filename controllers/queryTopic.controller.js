@@ -2,7 +2,7 @@
 
 const queryTopic = (req, res, next) => {
 
-console.log("hello from c")
+
 
 }
 

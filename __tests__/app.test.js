@@ -119,7 +119,7 @@ describe(" Challenge 5 - GET /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
+        
         expect(body.articles).toHaveLength(13);
         body.articles.forEach((article) => {
           expect(article).toHaveProperty("author", expect.any(String));
@@ -507,7 +507,7 @@ describe("Challenge 11 - /api/articles (queries)", () => {
       .get("/api/articles?topic=mitch")
       .expect(200)
       .then(({ body }) => {
-        //console.log(body.articles)
+        
         expect(body.articles).toHaveLength(12);
 
         body.articles.forEach((article) => {
@@ -756,7 +756,7 @@ describe("Challenge 18 - PATCH /api/comments/:comment_id (vote)", () => {
       .send(update)
       .expect(400)
       .then(({ body }) => {
-        console.log(body);
+        
         expect(body).toEqual({ msg: "400 - not found" });
       });
   });
@@ -768,7 +768,7 @@ describe("Challenge 18 - PATCH /api/comments/:comment_id (vote)", () => {
       .send(update)
       .expect(400)
       .then(({ body }) => {
-        console.log(body);
+    
         expect(body).toEqual({ msg: "400 - invalid type request" });
       });
   });
@@ -859,7 +859,7 @@ describe("Challenge 19 - POST /api/articles", () => {
           .send({ inc_votes: 1 })
           .expect(200)
           .then(({ body }) => {
-            console.log(body);
+            
           });
       });
   });
