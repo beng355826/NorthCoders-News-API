@@ -650,47 +650,271 @@ describe("Challenge 12 - GET /api/articles/:article_id (comment_count)", () => {
   });
 });
 
-describe.only('Challenge 17  /api/users/:username', () => {
-    
-    it('responds with a user object with the correct properties', () => {
-        
+describe("Challenge 17  /api/users/:username", () => {
+  it("responds with a user object with the correct properties", () => {
+    return request(app)
+      .get("/api/users/rogersop")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("username", "rogersop");
+        expect(body).toHaveProperty("name", "paul");
+        expect(body).toHaveProperty(
+          "avatar_url",
+          "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4"
+        );
+      });
+  });
+
+  it("return 404 user not found when an invalid user is provided", () => {
+    return request(app)
+      .get("/api/users/notauser")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "404 - not found",
+        });
+      });
+  });
+
+  it("return 404 user not found when an invalid type is provided", () => {
+    return request(app)
+      .get("/api/users/500")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "404 - not found",
+        });
+      });
+  });
+});
+
+describe("Challenge 18 - PATCH /api/comments/:comment_id (vote)", () => {
+  it("responds with the correct object when a positive increment is provided", () => {
+    const update = { inc_votes: 1 };
+
+    return request(app)
+      .patch("/api/comments/3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("comment_id", 3);
+        expect(body).toHaveProperty(
+          "body",
+          "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works."
+        );
+        expect(body).toHaveProperty("article_id", 1);
+        expect(body).toHaveProperty("votes", 101);
+        expect(body).toHaveProperty("created_at", "2020-03-01T01:13:00.000Z");
+      });
+  });
+
+  it("responds with the correct object when a negative is provided", () => {
+    const update = { inc_votes: -1 };
+
+    return request(app)
+      .patch("/api/comments/3")
+      .send(update)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("comment_id", 3);
+        expect(body).toHaveProperty(
+          "body",
+          "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works."
+        );
+        expect(body).toHaveProperty("article_id", 1);
+        expect(body).toHaveProperty("votes", 99);
+        expect(body).toHaveProperty("created_at", "2020-03-01T01:13:00.000Z");
+      });
+  });
+
+  it("returns a 400 when the comment is invalid", () => {
+    const update = { inc_votes: -1 };
+    return request(app)
+      .patch("/api/comments/invalidType")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "400 - invalid type request" });
+      });
+  });
+
+  it("returns a 404 when valid type but resource does not exist", () => {
+    const update = { inc_votes: -1 };
+    return request(app)
+      .patch("/api/comments/9999")
+      .send(update)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "404 - not found" });
+      });
+  });
+
+  it("returns a 400 when request body violates the not null constraint", () => {
+    const update = {};
+    return request(app)
+      .patch("/api/comments/3")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body).toEqual({ msg: "400 - not found" });
+      });
+  });
+
+  it("returns a 400 when sent an invalid type on the request body", () => {
+    const update = { inc_votes: "string" };
+    return request(app)
+      .patch("/api/comments/3")
+      .send(update)
+      .expect(400)
+      .then(({ body }) => {
+        console.log(body);
+        expect(body).toEqual({ msg: "400 - invalid type request" });
+      });
+  });
+});
+
+describe("Challenge 19 - POST /api/articles", () => {
+  it("respond with the correct 9 properties following accepting a body of 5 properties", () => {
+    const article = {
+      author: "rogersop",
+      title: "why top boy is the best show on tv",
+      body: "because its the best!!!!!",
+      topic: "paper",
+      article_img_url:
+        "//www.google.com/url?sa=i&url=https%3A%2F%2Fwww.theguardian.com%2Ftv-and-radio%2F2019%2Faug%2F31%2Fronan-bennett-top-boy-series-three-interview-netflix-drake&psig",
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(article)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("author", "rogersop");
+        expect(body).toHaveProperty(
+          "title",
+          "why top boy is the best show on tv"
+        );
+        expect(body).toHaveProperty("body", "because its the best!!!!!");
+        expect(body).toHaveProperty("topic", "paper");
+        expect(body).toHaveProperty(
+          "article_img_url",
+          "//www.google.com/url?sa=i&url=https%3A%2F%2Fwww.theguardian.com%2Ftv-and-radio%2F2019%2Faug%2F31%2Fronan-bennett-top-boy-series-three-interview-netflix-drake&psig"
+        );
+        expect(typeof body.article_id).toBe("number");
+        expect(body).toHaveProperty("votes", 0);
+        expect(body.created_at.toString()).toHaveLength(24);
+        expect(body).toHaveProperty("comment_count", 0);
+      });
+  });
+
+  it("return the correct object with a default image url if one is not provided", () => {
+    const article = {
+      author: "rogersop",
+      title: "why top boy is the best show on tv",
+      body: "because its the best!!!!!",
+      topic: "paper",
+      article_img_url: null,
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(article)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toHaveProperty("author", "rogersop");
+        expect(body).toHaveProperty(
+          "title",
+          "why top boy is the best show on tv"
+        );
+        expect(body).toHaveProperty("body", "because its the best!!!!!");
+        expect(body).toHaveProperty("topic", "paper");
+        expect(body).toHaveProperty(
+          "article_img_url",
+          "https://static.vecteezy.com/system/resources/thumbnails/002/206/011/small/article-icon-free-vector.jpg"
+        );
+        expect(typeof body.article_id).toBe("number");
+        expect(body).toHaveProperty("votes", 0);
+        expect(body.created_at.toString()).toHaveLength(24);
+        expect(body).toHaveProperty("comment_count", 0);
+      });
+  });
+
+  it("following the posting of an article, votes should be able to be applied", () => {
+    const article = {
+      author: "rogersop",
+      title: "why top boy is the best show on tv",
+      body: "because its the best!!!!!",
+      topic: "paper",
+      article_img_url: null,
+    };
+
+    return request(app)
+      .post("/api/articles")
+      .send(article)
+      .expect(201)
+      .then(({ body }) => {
         return request(app)
-        .get('/api/users/rogersop')
-        .expect(200)
-        .then(({body}) => {
+          .patch(`/api/articles/${body.article_id}`)
+          .send({ inc_votes: 1 })
+          .expect(200)
+          .then(({ body }) => {
+            console.log(body);
+          });
+      });
+  });
 
-            expect(body).toHaveProperty('username', 'rogersop')
-            expect(body).toHaveProperty('name' , 'paul')
-            expect(body).toHaveProperty('avatar_url', 'https://avatars2.githubusercontent.com/u/24394918?s=400&v=4' )
-        })
-    });
+  it("400 - missing required fields", () => {
+    const article = {};
 
-    it('return 404 user not found when an invalid user is provided', () => {
-        
-        return request(app)
-        .get('/api/users/notauser')
-        .expect(404)
-        .then(( {body}) => {
-            expect(body).toEqual({
-                msg:'404 - not found'
-            })
-    })  
+    return request(app)
+      .post("/api/articles")
+      .send(article)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body).toEqual({ msg: "400 - not found" });
+      });
+  });
 
-    });
+  it("404 - sends back an error when invalid author is provided", () => {
+    const article = {
+      author: "bennyg",
+      title: "why top boy is the best show on tv",
+      body: "because its the best!!!!!",
+      topic: "paper",
+      article_img_url: null,
+    };
 
-    it('return 404 user not found when an invalid user is provided', () => {
-        
-        return request(app)
-        .get('/api/users/500')
-        .expect(404)
-        .then(( {body}) => {
-            expect(body).toEqual({
-                msg:'404 - not found'
-            })
-    })  
+    return request(app)
+      .post("/api/articles")
+      .send(article)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "404 - not found",
+        });
+      });
+  });
 
-    });
+  it("404 - sends back an error when invalid topic is provided", () => {
+    const article = {
+      author: "rogersop",
+      title: "why top boy is the best show on tv",
+      body: "because its the best!!!!!",
+      topic: "wrongTopic",
+      article_img_url: null,
+    };
 
+    return request(app)
+      .post("/api/articles")
+      .send(article)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body).toEqual({
+          msg: "404 - not found",
+        });
+      });
+  });
 });
 
 
