@@ -1,9 +1,9 @@
 const db = require('../db/connection')
 
 const postTopicsMod = (body) => {
-console.log(body.description);
+
 if(!body.description || !body.slug){
-    console.log('hello');
+   
     return Promise.reject
 } 
 

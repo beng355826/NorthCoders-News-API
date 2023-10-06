@@ -1224,7 +1224,7 @@ describe('POST /api/topics', () => {
     .send(newTopic)
     .expect(404)
     .then(({body}) => {
-console.log(body);
+
       expect(body).toEqual({msg: '404 - not found'});
 
     })
@@ -1242,7 +1242,7 @@ console.log(body);
     .send(newTopic)
     .expect(404)
     .then(({body}) => {
-console.log(body);
+
       expect(body).toEqual({msg: '404 - not found'});
 
     })
