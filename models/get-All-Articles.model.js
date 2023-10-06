@@ -7,8 +7,10 @@ exports.selectAllArticles = (queryBody) => {
     }
   }
 
+  queryBody.limit === undefined ? queryBody.limit = 10 : null
+  
   let count = 0;
-  const keysArr = ["topic", "sort_by", "order"];
+  const keysArr = ["topic", "sort_by", "order", "limit", "p"];
   Object.keys(queryBody).forEach((key) => {
     if (!keysArr.includes(key)) {
       count++;
@@ -16,14 +18,12 @@ exports.selectAllArticles = (queryBody) => {
   });
 
   if (count > 0) {
-    return Promise.reject({msg : '400 query does not exist' });
+    return Promise.reject({ msg: "400 query does not exist" });
   }
 
-
-  let queryStr;
-  const queryValues = [];
+let queryStr;
   queryStr = `SELECT COUNT(comments.article_id)::INT
-AS comment_count, articles.article_id, articles.author, articles.title, topic, articles.created_at, articles.votes, articles.article_img_url 
+AS comment_count, articles.article_id, articles.author, articles.title, topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(*) OVER() AS total_rows 
 FROM articles LEFT JOIN comments 
 ON articles.article_id = comments.article_id`;
 
@@ -38,14 +38,38 @@ ON articles.article_id = comments.article_id`;
   }
 
   if (!queryBody.order || queryBody.order === "desc") {
-    queryStr += ` DESC;`;
+    queryStr += ` DESC`;
   } else {
-    queryStr += " ASC;";
+    queryStr += " ASC";
   }
 
-  return db.query(queryStr).then((query) => {
-    return query.rows;
+  if (queryBody.limit && queryBody.p) {
+    queryStr += ` LIMIT ${queryBody.limit} OFFSET ${
+      queryBody.limit * queryBody.p - queryBody.limit
+    }`;
+  }
+
+  queryStr += `;`;
+
+  return db.query(queryStr).then((data) => {
+
+if(data.rows.length !== 0){
+
+  const totalCount = parseInt(data.rows[0].total_rows)
+  const removedTotalRows = data.rows.map((article) => {
+       delete article.total_rows;
+       return article
+  })
+    const sendIt = { total_count: totalCount, articles: removedTotalRows };
+    return sendIt;
+
+} else {
+
+
+  const sendIt = { total_count: 0, articles: data.rows };
+  return sendIt
+}
+
+  
   });
 };
-
-

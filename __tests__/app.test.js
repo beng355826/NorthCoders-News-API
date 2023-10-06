@@ -578,6 +578,7 @@ describe("Challenge 11 - /api/articles (queries)", () => {
       .get("/api/articles?topic=random")
       .expect(200)
       .then(({ body }) => {
+        
         expect(body.articles).toEqual([]);
       });
   });
@@ -585,9 +586,9 @@ describe("Challenge 11 - /api/articles (queries)", () => {
   test("404 - if invalid column passed into sort_by query", () => {
     return request(app)
       .get("/api/articles?topic=mitch&sort_by=pineapple")
-      .expect(404)
+      .expect(400)
       .then(({ body }) => {
-        expect(body).toEqual({ msg: "404 - column does not exist" });
+        expect(body).toEqual({msg: '400 - invalid type request'});
       });
   });
 
@@ -859,7 +860,7 @@ describe("Challenge 19 - POST /api/articles", () => {
           .send({ inc_votes: 1 })
           .expect(200)
           .then(({ body }) => {
-            
+              expect(body.votes).toEqual(1);
           });
       });
   });
@@ -917,4 +918,336 @@ describe("Challenge 19 - POST /api/articles", () => {
   });
 });
 
+describe('challenge 20', () => {
+
+    it('accepts queries - limit and p and responds with the correct articles and a total count property', () => {
+        
+    return request(app)
+    .get('/api/articles?sort_by=article_id&order=asc&limit=5&p=2')
+    .expect(200)
+    .then(({body}) => {
+        
+        
+        expect(body).toHaveProperty('total_count');
+        expect(body.articles).toHaveLength(5);
+        body.articles.forEach((article) => {
+
+            expect(article).toHaveProperty('comment_count');
+            expect(article).toHaveProperty('article_id');
+            expect(article).toHaveProperty('author');
+            expect(article).toHaveProperty('title');
+            expect(article).toHaveProperty('topic');
+            expect(article).toHaveProperty('created_at');
+            expect(article).toHaveProperty('votes');
+            expect(article).toHaveProperty('article_img_url');
+
+        })
+        expect(body.articles[0].article_id).toBe(6);
+        expect(body.articles[1].article_id).toBe(7);
+        expect(body.articles[2].article_id).toBe(8);
+        expect(body.articles[3].article_id).toBe(9);
+        expect(body.articles[4].article_id).toBe(10);
+        
+    })
+
+    });
+
+    it('if limit is not applied, the default should be 10', () => {
+
+     return request(app)
+    .get('/api/articles?sort_by=article_id&order=asc&p=1')
+    .expect(200)
+    .then(({body}) => {
+        
+        expect(body.articles).toHaveLength(10);
+    })
+      
+    });
+
+
+    it('total Count should equal the total amount of articles with the filters applied - discounting the limit set.', () => {
+
+
+    return request(app)
+    .get('/api/articles?topic=mitch&sort_by=article_id&order=asc&limit=5&p=1')
+    .expect(200)
+    .then(({body}) => {
+
+      expect(body).toHaveProperty('total_count', 12);
+      expect(body.articles).toHaveLength(5);
+      body.articles.forEach((article) => {
+        expect(article).toHaveProperty('topic', 'mitch');
+    })
+
+    })
+
+      
+    });
+
+    it('still return all the articles when the limit is higher than the amount of articles with filters applied', () => {
+
+      return request(app)
+    .get('/api/articles?topic=mitch&sort_by=article_id&order=asc&limit=40&p=1')
+    .expect(200)
+    .then(({body}) => {
+
+      expect(body).toHaveProperty('total_count', 12);
+      expect(body.articles).toHaveLength(12);
+      body.articles.forEach((article) => {
+        expect(article).toHaveProperty('topic', 'mitch');
+    })
+
+    })
+      
+    });
+
+    it('200 - when limit is higher or equal to the total rows in the query but the page is higher than 1 returns an empty array, but with the total count', () => {
+
+    return request(app)
+    .get('/api/articles?topic=mitch&sort_by=article_id&order=asc&limit=40&p=2')
+    .expect(200)
+    .then(({body}) => {
+      
+      expect(body).toHaveProperty('total_count', 12)
+      expect(body.articles).toEqual([]);
+
+    })
+      
+    });
+
+
+    it('400 - returns error when limit is invalid type', () => {
+      
+      return request(app)
+        .get("/api/articles?topic=mitch&order=desc&limit=string&p=1")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body).toEqual({ msg: '400 - invalid type request' });
+        });
+
+
+    });
+
+    it('400 - returns error when p is invalid type', () => {
+      
+      return request(app)
+        .get("/api/articles?topic=mitch&order=desc&limit=5&p=string")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body).toEqual({ msg: '400 - invalid type request' });
+        });
+
+
+    });
+
+    test("200 responds with empty Array - if invalid column passed into topic query - when limit and p included in the query", () => {
+      return request(app)
+        .get("/api/articles?topic=random&limit=10&p=1")
+        .expect(200)
+        .then(({ body }) => {
+          
+          expect(body.articles).toEqual([]);
+        });
+    });
+  
+    test("404 - if invalid column passed into sort_by query when limit and p included in the query", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch&sort_by=pineapple&limit=10&p=1")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body).toEqual({msg: '400 - invalid type request'});
+        });
+    });
+  
+    test("404 - if invalid column passed into order query when limit and p included in the query", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch&sort_by=author&order=upsideDown&limit=10&p=1")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body).toEqual({ msg: "404 - not found" });
+        });
+    });
+  
+    test("400 - if invalid key is passed in the query with topic when limit and p included in the query", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch&RANDOMKEY=author&order=desc&limit=10&p=1")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body).toEqual({ msg: "400 query does not exist" });
+        });
+    });
+  
+    test("400 - if invalid key is passed in the query without topic when limit and p included in the query", () => {
+      return request(app)
+        .get("/api/articles?RANDOMKEY=mitch&sort_by=author&order=desc&limit=10&p=1")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body).toEqual({ msg: "400 query does not exist" });
+        });
+    });
+
+});
+
+describe('Challenge 21 - GET /api/articles/:article_id/comments (pagination)', () => {
+
+    it('accepts limit and p as queries and responds with a correctly paginated object', () => {
+
+      return request(app)
+    .get('/api/articles/1/comments?limit=5&p=1')
+    .expect(200)
+    .then(({body}) => {
+        
+        expect(body.comments).toHaveLength(5);
+        body.comments.forEach((comments) => {
+
+            expect(comments).toHaveProperty('body');
+            expect(comments).toHaveProperty('comment_id');
+            expect(comments).toHaveProperty('author');
+            expect(comments).toHaveProperty('article_id');
+            expect(comments).toHaveProperty('created_at');
+            expect(comments).toHaveProperty('votes');
+        })
+
+        const lastInSet = body.comments[4]
+        return lastInSet
+        
+    }).then((data) => {
+
+      return request(app)
+      .get('/api/articles/1/comments?limit=5&p=2')
+      .expect(200)
+      .then(({body}) => {
+    
+        const dateFive = parseInt(data.created_at.slice(5,7))
+        const dateSix = parseInt(body.comments[0].created_at.slice(5,7))
+        expect(dateFive).toBeGreaterThan(dateSix)
+
+      })
+
+    })
+
+      
+    });
+
+    it('if limit is absent but p is present limit will default to 10', () => {
+
+      return request(app)
+      .get('/api/articles/1/comments?&p=1')
+      .expect(200)
+      .then(({body}) => {
+
+        expect(body.comments).toHaveLength(10);
+
+      })
+      
+    });
+
+    it('200 - when limit is higher or equal to the total rows in the query but the page is higher than 1 returns an empty array,', () => {
+
+      return request(app)
+      .get('/api/articles/1/comments?limit=40&p=2')
+      .expect(200)
+      .then(({body}) => {
+        
+        expect(body.comments).toEqual([]);
+  
+      })
+        
+      });
+
+      it('400 - returns error when limit is invalid type', () => {
+      
+        return request(app)
+          .get("/api/articles/1/comments?limit=string&p=1")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body).toEqual({ msg: '400 - invalid type request' });
+          });
+  
+  
+      });
+  
+      it('400 - returns error when p is invalid type', () => {
+        
+        return request(app)
+          .get("/api/articles/1/comments?limit=5&p=string")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body).toEqual({ msg: '400 - invalid type request' });
+          });
+
+        })
+
+        it('400 - rejects when an incorrect query is provided', () => {
+
+          return request(app)
+          .get("/api/articles/1/comments?limit=5&NOTAQUERY=1")
+          .expect(400)
+          .then(({ body }) => {
+            expect(body).toEqual({ msg: '400 query does not exist' });
+          });
+          
+        });
+  
+});
+
+describe('POST /api/topics', () => {
+
+  it('responds with a newly created topic object when requesting the creation of a new topic', () => {
+
+    const newTopic = {
+      slug: "TV",
+      description: "whats on tv"
+    }
+    
+    return request(app)
+    .post('/api/topics')
+    .send(newTopic)
+    .expect(201)
+    .then(({body}) => {
+
+      expect(body).toHaveProperty('slug', 'TV');
+      expect(body).toHaveProperty('description', 'whats on tv');
+
+    })
+
+  });
+
+  it('400 - one of the keys is missing on the request', () => {
+    
+    const newTopic = {
+      slug: "TV",
+    }
+    
+    return request(app)
+    .post('/api/topics')
+    .send(newTopic)
+    .expect(404)
+    .then(({body}) => {
+console.log(body);
+      expect(body).toEqual({msg: '404 - not found'});
+
+    })
+
+  });
+
+  it('400 - one of the keys is missing on the request', () => {
+    
+    const newTopic = {
+      description: 'what on tv',
+    }
+    
+    return request(app)
+    .post('/api/topics')
+    .send(newTopic)
+    .expect(404)
+    .then(({body}) => {
+console.log(body);
+      expect(body).toEqual({msg: '404 - not found'});
+
+    })
+
+  });
+  
+});
 

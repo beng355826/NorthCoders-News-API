@@ -7,6 +7,10 @@ const error400Handler = (err, req, res, next) => {
         res.status(400).send({msg: '400 - not found'})
     }
 
+    if(err.code === '42703'){
+        res.status(400).send({msg: '400 - invalid type request'})
+    }
+
     if(err.msg === '400 query does not exist'){
         res.status(400).send({msg:'400 query does not exist' })
     }
