@@ -2,26 +2,22 @@
   "GET /api/": {
     "description": "serves up a json representation of all the available endpoints of the api",
     "queries": [],
-    "format" : "n/a",
-    "exampleResponse" : {
-
+    "format": {},
+    "exampleResponse": {
       "GET /api/topics": {
         "description": "serves an array of all topics",
         "queries": [],
-        "format" : "n/a",
+        "format": "n/a",
         "exampleResponse": {
           "topics": [{ "slug": "football", "description": "Footie!" }]
         }
       }
     }
-
-    
-
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles",
-    "queries": [ "topic", "sort_by", "order"],
-    "format": "n/a",
+    "description": "serves an array of all articles. it can be filtered by topic, sorted by sort_by, ordered and paginated. 'Limit' is defaulted at 10 rows but must have 'p' as a query to be paginated at all.",
+    "queries": ["topic", "sort_by", "order", "limit", "p"],
+    "format of request": {},
     "exampleResponse": {
       "articles": [
         {
@@ -37,85 +33,77 @@
     }
   },
 
-
-"GET /api/articles/:article_id" : {
-
-  "description": "serves an object with the request article within",
-  "queries" : [],
-  "format" : "n/a",
-  "exampleResponse" : {
-  "article_id": 1,
-  "title": "Living in the shadow of a great man",
-  "topic": "mitch",
-  "author": "butter_bridge",
-  "body": "I find this existence challenging",
-  "created_at": "2020-07-09T20:11:00.000Z",
-  "votes": 100,
-  "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-  "comment_count": 11}
-
-},
-
-"GET /api/articles/:article_id/comments" :{
-  "description" : "serves all the comments related to the specified article_id",
-  "queries" : [],
-  "format" : "n/a",
-  "exampleResponse" : {
-
-    "comment_id": 10,
-    "body": "git push origin master",
-    "article_id": 3,
-    "author": "icellusedkars",
-    "votes": 0,
-    "created_at": "2020-06-20T07:24:00.000Z"
-
-  }
-},
-
-  "GET /api/topics": {
-    "description": "serves an array of all topics",
+  "GET /api/articles/:article_id": {
+    "description": "serves the requested article according to the article Id",
     "queries": [],
-    "format" : "n/a",
+    "format": "n/a",
     "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
+      "article_id": 1,
+      "title": "Living in the shadow of a great man",
+      "topic": "mitch",
+      "author": "butter_bridge",
+      "body": "I find this existence challenging",
+      "created_at": "2020-07-09T20:11:00.000Z",
+      "votes": 100,
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      "comment_count": 11
     }
   },
 
-  "GET /api/users": {
-
-      "description": "serves an array of objects - with username, name and avatar_url",
-      "queries": [],
-      "format" : "n/a",
-      "exampleResponse" : {
-          "username": "icellusedkars",
-          "name": "sam",
-          "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
-      }
-
-  },
-
-  "POST /api/articles/:article_id/comments" : {
-    "description" : "allows the user to send a comment which will will be returned as confirmation",
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves all the comments related to the specified article_id",
     "queries": [],
-    "format" : "JSON",
-    "exampleResponse" : {
-
+    "format": {},
+    "exampleResponse": {
+      "comment_id": 10,
+      "body": "git push origin master",
+      "article_id": 3,
+      "author": "icellusedkars",
+      "votes": 0,
+      "created_at": "2020-06-20T07:24:00.000Z"
+    }
+  },
+  "POST /api/articles": {
+    "description": "Posts a new article to the database and returns the created article with additional properties added automatically,",
+    "queries": [],
+    "format": {
+      "author": "A valid username",
+      "title": "Any string",
+      "body": "Any string",
+      "topic": "A valid topic",
+      "article_img_url": "Any string"
+    },
+    "exampleResponse": {
+      "author": "rogersop",
+      "title": "why top boy is the best show on tv",
+      "body": "because its the best!!!!!",
+      "topic": "paper",
+      "article_img_url": "//www.google.com/url?sa=i&url=https%3A%2F%2Fwww.theguardian.com%2Ftv-and-radio%2F2019%2Faug%2F31%2Fronan-bennett-top-boy-series-three-interview-netflix-drake&psig",
+      "article_id": 17,
+      "votes": 0,
+      "created_at": "2018-05-30T15:59:13.341Z"
+    }
+  },
+  "POST /article/:articleId/comments": {
+    "description": "Will create a comment and post it to the database with the requested article_id as a property",
+    "queries": [],
+    "format": { "username": "A valid username", "body": "Any String" },
+    "exampleResponse": {
       "comment_id": 19,
       "body": "Ey up lad fancy a jar?",
       "article_id": 3,
       "author": "butter_bridge",
       "votes": 0,
       "created_at": "2023-07-06T20:42:12.841Z"
-
     }
   },
 
-  "PATCH /api/articles/:article_id" : {
-    "description" : "Will allow the user to either up vote or down vote an article",
-    "queries" : [],
-    "format" : "JSON",
-    "exampleResponse" : {
-
+  "PATCH /api/articles/:article_id": {
+    "description": "will increment or reduce the vote property to the specified article. It will then return the article with the updated votes amount",
+    "queries": [],
+    "format": { "inc_votes": 1 },
+    "alternative format": { "inc_votes": -1 },
+    "exampleResponse": {
       "article_id": 3,
       "title": "Eight pug gifs that remind me of mitch",
       "topic": "mitch",
@@ -124,17 +112,67 @@
       "created_at": "2020-11-03T09:12:00.000Z",
       "votes": -10,
       "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
-
     }
   },
 
-  "DELETE /api/comments/:comment_id" : {
+  "GET /api/topics": {
+    "description": "serves an array of objects with the topics",
+    "queries": [],
+    "format": {},
+    "exampleResponse": {
+      "topics": [{ "slug": "football", "description": "all about football!" }]
+    }
+  },
+  "POST /api/topics": {
+    "description": "posts a new topic object to the database and responds with the said object",
+    "queries": [],
+    "format": { "slug": "Any string", "description": "Any String" },
+    "exampleResponse": {
+      "slug": "coding",
+      "description": "Code is love, code is life"
+    }
+  },
 
-    "description" : "Will delete a selected comment",
-    "queries" : [],
-    "format" : "n/a",
-    "exampleResponse" : {"status" :204}
+  "DELETE /api/comments/:comment_id": {
+    "description": "Will delete a selected comment according to the comment_id",
+    "queries": [],
+    "format": {},
+    "exampleResponse": { "status": 204 }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "will increment or reduce the vote property to the specified comment. It will then return the comment with the new votes amount",
+    "queries": [],
+    "format": { "inc_votes": 1 },
+    "alternative format": { "inc_votes": -1 },
 
-}
+    "exampleResponse": {
+      "comment_id": 84,
+      "body": "Modi cum quo maxime sunt quia doloribus consequatur recusandae. Quam temporibus est non dolorem. Rerum dolorem nulla sed nam repellendus doloribus non accusantium. Id beatae est et a.",
+      "article_id": 13,
+      "author": "grumpy19",
+      "votes": -1,
+      "created_at": "2020-10-11T06:19:00.000Z"
+    }
+  },
 
+  "GET /api/users": {
+    "description": "serves an array of objects - with username, name and avatar_url",
+    "queries": [],
+    "format": {},
+    "exampleResponse": {
+      "username": "icellusedkars",
+      "name": "sam",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "provides an object of the user, according to the specified username",
+    "queries": [],
+    "format": {},
+    "exampleResponse": {
+      "username": "grumpy19",
+      "name": "Paul Grump",
+      "avatar_url": "https://vignette.wikia.nocookie.net/mrmen/images/7/78/Mr-Grumpy-3A.PNG/revision/latest?cb=20170707233013"
+    }
+  }
 }

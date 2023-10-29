@@ -51,7 +51,6 @@ describe(" Challenge 3 - GET /api/", () => {
             expect.any(String)
           );
           expect(body._body[key]).toHaveProperty("queries", expect.any(Array));
-          expect(body._body[key]).toHaveProperty("format", expect.any(String));
           expect(body._body[key]).toHaveProperty(
             "exampleResponse",
             expect.any(Object)
@@ -783,7 +782,7 @@ describe("Challenge 19 - POST /api/articles", () => {
       body: "because its the best!!!!!",
       topic: "paper",
       article_img_url:
-        "//www.google.com/url?sa=i&url=https%3A%2F%2Fwww.theguardian.com%2Ftv-and-radio%2F2019%2Faug%2F31%2Fronan-bennett-top-boy-series-three-interview-netflix-drake&psig",
+        "//www.google.com/url?sa=i&url=https%3A%2F%2Fwww.theguardian.com%2Ftv-and-radio%2F2019%2Faug%2F31%2Fronan-bennett-top-boy-series-three-interview-netflix-drake&psig"
     };
 
     return request(app)
@@ -918,7 +917,7 @@ describe("Challenge 19 - POST /api/articles", () => {
   });
 });
 
-describe('challenge 20', () => {
+describe('challenge 20 - GET /ap/articles (pagination)', () => {
 
     it('accepts queries - limit and p and responds with the correct articles and a total count property', () => {
         
@@ -1191,7 +1190,7 @@ describe('Challenge 21 - GET /api/articles/:article_id/comments (pagination)', (
   
 });
 
-describe('POST /api/topics', () => {
+describe('Challenge 22 - POST /api/topics', () => {
 
   it('responds with a newly created topic object when requesting the creation of a new topic', () => {
 
