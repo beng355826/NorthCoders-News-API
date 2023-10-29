@@ -1,13 +1,13 @@
-const format = require('pg-format');
-const db = require('../connection');
+const format = require('pg-format');  // this is for formatting sql queries
+const db = require('../connection'); // db is the client to the postgresql server
 const {
   convertTimestampToDate,
   createRef,
   formatComments,
 } = require('./utils');
 
-const seed = ({ topicData, userData, articleData, commentData }) => {
-  return db
+const seed = ({ topicData, userData, articleData, commentData }) => {    
+  return db 
     .query(`DROP TABLE IF EXISTS comments;`)
     .then(() => {
       return db.query(`DROP TABLE IF EXISTS articles;`);
